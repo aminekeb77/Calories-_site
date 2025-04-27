@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calories by amine.ke</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calories by amine.ke</h1>
+
+    <input type="text" id="foodName" placeholder="ادخل اسم الطعام">
+    <input type="number" id="foodAmount" placeholder="الكمية بالجرامات">
+
+    <button onclick="calculateCalories()">احسب السعرات</button>
+
+    <h2>السعرات المستهلكة اليوم: <span id="totalCalories">0</span> / 2000 سعرة</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>الطعام</th>
+                <th>الكمية (جم)</th>
+                <th>السعرات الحرارية</th>
+            </tr>
+        </thead>
+        <tbody id="foodTable">
+            <!-- البيانات ستظهر هنا -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const foodDatabase = {
+        "رز مطبوخ": 130,
+        "دجاج مشوي": 165,
+        "تفاح": 52,
+        "موز": 89,
+        "بيض مسلوق": 155,
+        "لحم بقري": 250
+    };
+
+    let totalCalories = 0;
+
+    function calculateCalories() {
+        const foodName = document.getElementById('foodName').value.trim();
+        const foodAmount = parseFloat(document.getElementById('foodAmount').value);
+
+        if (!foodDatabase[foodName]) {
+            alert('الطعام غير موجود في قاعدة البيانات.');
+            return;
+        }
+
+        if (isNaN(foodAmount) || foodAmount <= 0) {
+            alert('الرجاء إدخال كمية صحيحة.');
+            return;
+        }
+
+        const caloriesPerGram = foodDatabase[foodName] / 100;
+        const calories = caloriesPerGram * foodAmount;
+
+        totalCalories += calories;
+        document.getElementById('totalCalories').innerText = Math.round(totalCalories);
+
+        const table = document.getElementById('foodTable');
+        const newRow = table.insertRow();
+        newRow.innerHTML = `
+            <td>${foodName}</td>
+            <td>${foodAmount} جم</td>
+            <td>${Math.round(calories)} سعرة</td>
+        `;
+
+        // مسح الحقول بعد الحساب
+        document.getElementById('foodName').value = '';
+        document.getElementById('foodAmount').value = '';
+    }
+</script>
+
+</body>
+</html>
